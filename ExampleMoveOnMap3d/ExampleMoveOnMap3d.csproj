@@ -103,6 +103,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Debug\ComponentDebug.cs" />
     <Compile Include="Components\Inputs\ComponentInputs.cs" />
     <Compile Include="Components\Inputs\InputData.cs" />
     <Compile Include="Components\Map\ComponentMap.cs" />
@@ -119,11 +120,13 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Content\Debug.spritefont" />
     <None Include="Content\Plate_Grass_01.mtl" />
     <None Include="Content\Plate_Grass_01.obj" />
     <None Include="ExampleMoveOnMap3d_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Blank.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

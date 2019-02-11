@@ -16,6 +16,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         private Vector3 _offsetRotation;
 
         public Vector3 Position { set; get; } = new Vector3();
+        public Vector3 Rotation { get; set; } = new Vector3();
 
         public PlateGrassTile(Vector3 offsetPosition, float scale, Model model)
         {
@@ -60,9 +61,9 @@ namespace ExampleMoveOnMap3d.Components.Map
         private void SetTransform(BasicEffect effect, ModelMesh mesh)
         {
             effect.World = this._transform[mesh.ParentBone.Index] *
-                            Matrix.CreateRotationX(this._offsetRotation.X) *
-                            Matrix.CreateRotationY(this._offsetRotation.Y) *
-                            Matrix.CreateRotationZ(this._offsetRotation.Z) *
+                            Matrix.CreateRotationX(this._offsetRotation.X + this.Rotation.X) *
+                            Matrix.CreateRotationY(this._offsetRotation.Y + this.Rotation.Y) *
+                            Matrix.CreateRotationZ(this._offsetRotation.Z + this.Rotation.Z) *
                             Matrix.CreateTranslation(this.Position + this._offsetPosition) *
                             Matrix.CreateScale(this._scale);
         }

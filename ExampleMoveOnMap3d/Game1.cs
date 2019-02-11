@@ -20,6 +20,7 @@
 /// 
 /// #########################################################################################################
 
+using ExampleMoveOnMap3d.Components.Debug;
 using ExampleMoveOnMap3d.Components.Inputs;
 using ExampleMoveOnMap3d.Components.Map;
 using ExampleMoveOnMap3d.Components.Render;
@@ -33,10 +34,13 @@ namespace ExampleMoveOnMap3d
         private readonly ComponentInputs _componentInputs;
         private readonly ComponentMap _componentMap;
         private readonly ComponentRender _componentRender;
+        private readonly ComponentDebug _componentDebug;
         
         public Game1()
         {
             this._graphics = new GraphicsDeviceManager(this);
+
+
             this.Content.RootDirectory = "Content";
 
             this.Window.Title = "Move on map 3d";
@@ -52,7 +56,13 @@ namespace ExampleMoveOnMap3d
 
             this._componentRender = new ComponentRender(this, this._componentMap);
             this._componentRender.UpdateOrder = 3;
+            this._componentRender.DrawOrder = 1;
             this.Components.Add(this._componentRender);
+
+            this._componentDebug = new ComponentDebug(this, this._componentRender);
+            this._componentDebug.UpdateOrder = 4;
+            this._componentDebug.DrawOrder = 2;
+            this.Components.Add(this._componentDebug);
         }
     }
 }

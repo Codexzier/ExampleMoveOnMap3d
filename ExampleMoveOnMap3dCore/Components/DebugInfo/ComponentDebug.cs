@@ -1,8 +1,8 @@
-﻿using ExampleMoveOnMap3d.Components.Render;
+﻿using ExampleMoveOnMap3dCore.Components.Render;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ExampleMoveOnMap3d.Components.DebugInfo
+namespace ExampleMoveOnMap3dCore.Components.DebugInfo
 {
     public class ComponentDebug : DrawableGameComponent
     {
@@ -76,11 +76,11 @@ namespace ExampleMoveOnMap3d.Components.DebugInfo
             this._spriteBatch.DrawString(this._spriteFont,
                                         strValue,
                                         new Vector2(20, positionY),
-                                        Color.White,
-                                        0f,
-                                        new Vector2(),
-                                        0.5f,
-                                        SpriteEffects.None,
+                                        Color.White, 
+                                        0f, 
+                                        new Vector2(), 
+                                        0.5f, 
+                                        SpriteEffects.None, 
                                         1f);
         }
     }

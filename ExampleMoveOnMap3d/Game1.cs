@@ -20,7 +20,7 @@
 /// 
 /// #########################################################################################################
 
-using ExampleMoveOnMap3d.Components.Debug;
+using ExampleMoveOnMap3d.Components.DebugInfo;
 using ExampleMoveOnMap3d.Components.Inputs;
 using ExampleMoveOnMap3d.Components.Map;
 using ExampleMoveOnMap3d.Components.Render;

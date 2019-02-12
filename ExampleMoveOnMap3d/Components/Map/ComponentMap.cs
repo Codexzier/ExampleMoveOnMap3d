@@ -19,7 +19,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         private int _resetStopWatchSec = 1;
 
         private int _step = 0;
-        private int _normalStep = 2;
+        private int _mode = 2;
 
         private float _moveX = 0.1f;
         private float _moveY = 0.1f;
@@ -28,6 +28,8 @@ namespace ExampleMoveOnMap3d.Components.Map
         private float _rotateY = 1f;
 
         public int ShowObjects { get; set; }
+
+        public int Mode => this._mode;
 
         public ComponentMap(Game game, ComponentInputs componentInputs) : base(game)
         {
@@ -77,10 +79,12 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._stopwatch.Start();
         }
 
+
+
         private PlateGrassTile[] GetTiles()
         {
             PlateGrassTile[] tilesTmp;
-            switch (this._normalStep)
+            switch (this._mode)
             {
                 case 0:
                     tilesTmp = this._groundTiles;
@@ -107,13 +111,13 @@ namespace ExampleMoveOnMap3d.Components.Map
                 {
                     this._step = 0;
 
-                    if(this._normalStep >= 2)
+                    if(this._mode >= 2)
                     {
-                        this._normalStep = 0;
+                        this._mode = 0;
                     }
                     else
                     {
-                        this._normalStep++;
+                        this._mode++;
                     }
 
                     PlateGrassTile[] tilesTmp = this.GetTiles();
@@ -203,9 +207,6 @@ namespace ExampleMoveOnMap3d.Components.Map
                         break;
                     }
                 default:
-                    //item.Position = new Vector3();
-                    //item.Rotation = new Vector3();
-                    //this._normal = !this._normal;
                     break;
             }
 

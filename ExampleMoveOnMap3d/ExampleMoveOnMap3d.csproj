@@ -103,7 +103,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Components\Debug\ComponentDebug.cs" />
+    <Compile Include="Components\DebugInfo\ComponentDebug.cs" />
     <Compile Include="Components\Inputs\ComponentInputs.cs" />
     <Compile Include="Components\Inputs\InputData.cs" />
     <Compile Include="Components\Map\ComponentMap.cs" />

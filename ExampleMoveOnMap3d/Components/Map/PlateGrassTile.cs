@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Linq;
 
 namespace ExampleMoveOnMap3d.Components.Map
@@ -17,7 +16,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public Vector3 Position { set; get; } = new Vector3();
         public Vector3 Rotation { get; set; } = new Vector3();
-
+        
         public PlateGrassTile(Vector3 offsetPosition, float scale, Model model)
         {
             this._offsetPosition = offsetPosition;
@@ -33,7 +32,7 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._mesh = this._model.Meshes.First();
             this._onlyOneMesh = !this._model.Meshes.Any();
         }
-
+        
         public void Draw(Matrix view, Matrix projection)
         {
 
@@ -67,5 +66,7 @@ namespace ExampleMoveOnMap3d.Components.Map
                             Matrix.CreateTranslation(this.Position + this._offsetPosition) *
                             Matrix.CreateScale(this._scale);
         }
+
+     
     }
 }

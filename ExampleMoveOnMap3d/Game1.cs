@@ -31,7 +31,8 @@ namespace ExampleMoveOnMap3d
     {
         private readonly GraphicsDeviceManager _graphics;
         private readonly ComponentInputs _componentInputs;
-        private readonly ComponentMap _componentMap;
+        private readonly ComponentMap _componentMapPlayer1;
+        private readonly ComponentMap _componentMapPlayer2;
         private readonly ComponentRender _componentRender;
         
         public Game1()
@@ -46,12 +47,16 @@ namespace ExampleMoveOnMap3d
             this._componentInputs.UpdateOrder = 1;
             this.Components.Add(this._componentInputs);
 
-            this._componentMap = new ComponentMap(this, this._componentInputs);
-            this._componentMap.UpdateOrder = 2;
-            this.Components.Add(this._componentMap);
+            this._componentMapPlayer1 = new ComponentMap(this, this._componentInputs, 1);
+            this._componentMapPlayer1.UpdateOrder = 2;
+            this.Components.Add(this._componentMapPlayer1);
 
-            this._componentRender = new ComponentRender(this, this._componentMap);
-            this._componentRender.UpdateOrder = 3;
+            this._componentMapPlayer2 = new ComponentMap(this, this._componentInputs, 2);
+            this._componentMapPlayer2.UpdateOrder = 3;
+            this.Components.Add(this._componentMapPlayer2);
+
+            this._componentRender = new ComponentRender(this, this._componentMapPlayer1, this._componentMapPlayer2);
+            this._componentRender.UpdateOrder = 4;
             this.Components.Add(this._componentRender);
         }
     }

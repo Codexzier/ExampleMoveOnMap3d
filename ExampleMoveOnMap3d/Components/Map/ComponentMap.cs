@@ -9,12 +9,13 @@ namespace ExampleMoveOnMap3d.Components.Map
     {
         private const float _speed = 0.3f;
         private readonly ComponentInputs _componentInputs;
-
+        private readonly int _player;
         private PlateGrassTile[] _groundTiles = new PlateGrassTile[9];
 
-        public ComponentMap(Game game, ComponentInputs componentInputs) : base(game)
+        public ComponentMap(Game game, ComponentInputs componentInputs, int player) : base(game)
         {
             this._componentInputs = componentInputs;
+            this._player = player;
         }
 
         public override void Initialize()
@@ -36,11 +37,19 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public override void Update(GameTime gameTime)
         {
+            Vector3 positon = new Vector3();
+            if (this._player == 1)
+            {
+                positon = new Vector3(this._componentInputs.Inputs1.MoveX, this._componentInputs.Inputs1.MoveY, 0) * _speed;
+            }
+            else
+            {
+                positon = new Vector3(this._componentInputs.Inputs2.MoveX, this._componentInputs.Inputs2.MoveY, 0) * _speed;
+            }
+
             foreach (var item in this._groundTiles)
             {
-                item.Position += new Vector3(this._componentInputs.Inputs.MoveX, 
-                                                this._componentInputs.Inputs.MoveY, 0) 
-                                                * _speed; 
+                item.Position += positon;
             }
         }
 

@@ -5,18 +5,26 @@ namespace ExampleMoveOnMap3d.Components.Render
 {
     public class ComponentRender : DrawableGameComponent
     {
-        private readonly CameraView _cameraView;
+        private readonly CameraView _cameraViewLeft;
+        private readonly CameraView _cameraViewRight;
 
-        public ComponentRender(Game game, ComponentMap componentContent) : base(game)
+        public ComponentRender(Game game, ComponentMap componentContent, ComponentMap componentContent2) : base(game)
         {
-            this._cameraView = new CameraView(game, componentContent);
-            this._cameraView.Initialize();
+            this._cameraViewLeft = new CameraView(game, componentContent, false); 
+            this._cameraViewRight = new CameraView(game, componentContent2, true);
+        }
+
+        public override void Initialize()
+        {
+            this._cameraViewLeft.Initialize();
+            this._cameraViewRight.Initialize();
         }
 
         public override void Draw(GameTime gameTime)
         {
             this.GraphicsDevice.Clear(Color.CornflowerBlue);
-            this._cameraView.Draw();
+            this._cameraViewLeft.Draw();
+            this._cameraViewRight.Draw();
         }
     }
 }

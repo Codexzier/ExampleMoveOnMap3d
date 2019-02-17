@@ -53,7 +53,7 @@ namespace ExampleMoveOnMap3d.Components.DebugInfo
             int objects = this._componentRender.ComponentContent.ShowObjects;
 
             this._spriteBatch.Draw(this._blank,
-                                new Vector2(5, 0),
+                                new Vector2(95, 0),
                                 null,
                                 Color.White,
                                 0,
@@ -75,7 +75,7 @@ namespace ExampleMoveOnMap3d.Components.DebugInfo
         {
             this._spriteBatch.DrawString(this._spriteFont,
                                         strValue,
-                                        new Vector2(20, positionY),
+                                        new Vector2(100, positionY),
                                         Color.White,
                                         0f,
                                         new Vector2(),

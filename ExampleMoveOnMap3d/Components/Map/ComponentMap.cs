@@ -12,14 +12,22 @@ namespace ExampleMoveOnMap3d.Components.Map
         private readonly int _player;
         private PlateGrassTile[] _groundTiles = new PlateGrassTile[9];
 
+        private Car _car;
+
         public ComponentMap(Game game, ComponentInputs componentInputs, int player) : base(game)
         {
             this._componentInputs = componentInputs;
             this._player = player;
+
+            
+            
         }
 
         public override void Initialize()
         {
+            string carModel = this._player == 1 ? "raceCarGreen" : "raceCarOrange";
+            this._car = new Car(new Vector3(0, 0, 05), new Vector3(MathHelper.ToRadians(90), 0, MathHelper.ToRadians(180)), .2f, this.Game.Content.Load<Model>(carModel));
+
             var grass = this.Game.Content.Load<Model>("Plate_Grass_01");
 
             int index = 0;
@@ -59,6 +67,8 @@ namespace ExampleMoveOnMap3d.Components.Map
             {
                 item.Draw(view, projection);
             }
+
+            this._car.Draw(view, projection);
         }
 
         private Vector3 GetPosition(int x, int y)

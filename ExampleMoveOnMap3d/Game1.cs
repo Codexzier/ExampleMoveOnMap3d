@@ -1,8 +1,8 @@
 ﻿/// #########################################################################################################
 ///
 ///  Blog: Meine Welt in meinem Kopf
-///  Post: 3d Karte bewegen (MonoGame)
-///  Postdate: 10.02.2019
+///  Post: 3d Karte bewegen (MonoGame) (Branch: SplittScreen
+///  Postdate: 17.02.2019
 ///  --------------------------------------------------------------------------------------------------------
 ///  Kurze Information:
 ///  Diese Solution dient als Quellcode Beispiel und zeigt lediglich 

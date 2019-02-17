@@ -18,9 +18,6 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this._componentInputs = componentInputs;
             this._player = player;
-
-            
-            
         }
 
         public override void Initialize()

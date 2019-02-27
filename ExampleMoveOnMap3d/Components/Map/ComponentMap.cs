@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
 
 namespace ExampleMoveOnMap3d.Components.Map
 {
@@ -9,8 +10,9 @@ namespace ExampleMoveOnMap3d.Components.Map
     {
         private const float _speed = 0.3f;
         private readonly ComponentInputs _componentInputs;
-
-        private PlateGrassTile[] _groundTiles = new PlateGrassTile[9];
+        private AnimatedWaterwaves _animatedWaterwaves;
+        private BottleModel _bottleModel;
+        private Effect _effect;
 
         public ComponentMap(Game game, ComponentInputs componentInputs) : base(game)
         {
@@ -19,49 +21,46 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public override void Initialize()
         {
-            var grass = this.Game.Content.Load<Model>("Plate_Grass_01");
+            var texture = this.Game.Content.Load<Texture2D>("rpgTile029");
+            this._animatedWaterwaves = new AnimatedWaterwaves(texture);
+            this._animatedWaterwaves.Initialize(this.Game.GraphicsDevice);
 
-            int index = 0;
-            for (int iY = 0; iY < 3; iY++)
-            {
-                for (int iX = 0; iX < 3; iX++)
-                {
-                    this._groundTiles[index] = new PlateGrassTile(this.GetPosition(iX, iY),
-                                                                    0.5f, 
-                                                                    grass);
-                    index++;
-                }
-            }
+            var bottle = this.Game.Content.Load<Model>("bottle");
+            this._bottleModel = new BottleModel(new Vector3(), new Vector3(MathHelper.ToRadians(90), MathHelper.ToRadians(90), 0), 1f, bottle);
+
+            this._lastPositionZ = this._bottleModel.Position.Z;
+
+            this._effect = this.Game.Content.Load<Effect>("SimpleShadow");
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var item in this._groundTiles)
-            {
-                item.Position += new Vector3(this._componentInputs.Inputs.MoveX, 
-                                                this._componentInputs.Inputs.MoveY, 0) 
-                                                * _speed; 
-            }
+            this._bottleModel.SetOffsetRotation(new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0));
+
+
+            this._bottleModel.AddPosition(new Vector3(this._componentInputs.Inputs.Move, 0), .3f);
+            this._lastPositionZ = this._bottleModel.Position.Z;
+
+            this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
+            var d = this._animatedWaterwaves.GetAngle(this._bottleModel.Position);
+            this._bottleModel.SetPosition(this.SetDelay(d.Position, this._bottleModel.Position));
+
+            this._bottleModel.SetRotation(d.Rotation);
+        }
+
+        private float _lastPositionZ = 0;
+
+        private Vector3 SetDelay(Vector3 waterPosition, Vector3 objectPosition)
+        {
+            return new Vector3(objectPosition.X, objectPosition.Y, (waterPosition.Z + this._lastPositionZ) / 2);
         }
 
         public void DrawContent(Matrix view, Matrix projection)
         {
-            foreach (var item in this._groundTiles)
-            {
-                item.Draw(view, projection);
-            }
+            this._animatedWaterwaves.Draw(this.Game.GraphicsDevice, view, projection);
+            this._bottleModel.Draw(view, projection);
         }
 
-        private Vector3 GetPosition(int x, int y)
-        {
-            float mapLength = 3f;
-            float distance = .02f;
-            float centerMap = (mapLength + distance) 
-                                * (float)Math.Sqrt(this._groundTiles.Length) / 2; ;
 
-            return new Vector3((y * (mapLength + distance)) - centerMap,
-                                (x * (mapLength + distance)) - centerMap, 
-                                0);
-        }
     }
 }

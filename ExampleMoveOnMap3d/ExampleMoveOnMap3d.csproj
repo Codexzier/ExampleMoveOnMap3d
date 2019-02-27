@@ -105,8 +105,10 @@
     </Compile>
     <Compile Include="Components\Inputs\ComponentInputs.cs" />
     <Compile Include="Components\Inputs\InputData.cs" />
+    <Compile Include="Components\Map\AnimatedWaterwaves.cs" />
+    <Compile Include="Components\Map\BottleModel.cs" />
     <Compile Include="Components\Map\ComponentMap.cs" />
-    <Compile Include="Components\Map\PlateGrassTile.cs" />
+    <Compile Include="Components\Map\CoordinateDetails.cs" />
     <Compile Include="Components\Render\CameraView.cs" />
     <Compile Include="Components\Render\ComponentRender.cs" />
     <Compile Include="GamePage.xaml.cs">
@@ -119,11 +121,12 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Content\Plate_Grass_01.mtl" />
-    <None Include="Content\Plate_Grass_01.obj" />
+    <None Include="Content\bottle.fbx" />
     <None Include="ExampleMoveOnMap3d_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\rpgTile029.png" />
+    <Content Include="Content\SimpleShadow.fx" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

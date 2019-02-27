@@ -21,8 +21,8 @@ namespace ExampleMoveOnMap3d.Components.Render
         public void Initialize()
         {
             var aspectRatio = this.GetAspectRatio();
-            var position = new Vector3(-1f, 5f, 5f);
-            var target = new Vector3(0, 0, 0);
+            var position = new Vector3(-1f, -20f, 20f);
+            var target = new Vector3(10, 10, 0);
             var farPlaneDistance = 10000;
 
             this.View = Matrix.CreateLookAt(position, target, Vector3.Backward);

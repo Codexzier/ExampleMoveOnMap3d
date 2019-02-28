@@ -1,8 +1,6 @@
 ﻿using ExampleMoveOnMap3d.Components.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Diagnostics;
 
 namespace ExampleMoveOnMap3d.Components.Map
 {
@@ -27,6 +25,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             var bottle = this.Game.Content.Load<Model>("bottle");
             this._bottleModel = new BottleModel(new Vector3(), new Vector3(MathHelper.ToRadians(90), MathHelper.ToRadians(90), 0), 1f, bottle);
+            this._bottleModel.SetPosition(new Vector3(10,10,0));
 
             this._lastPositionZ = this._bottleModel.Position.Z;
 

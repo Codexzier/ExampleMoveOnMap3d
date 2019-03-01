@@ -34,6 +34,8 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public override void Update(GameTime gameTime)
         {
+            this._bottleModel.Update(gameTime);
+
             this._bottleModel.SetOffsetRotation(new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0));
 
 
@@ -42,7 +44,20 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
             var d = this._animatedWaterwaves.GetAngle(this._bottleModel.Position);
-            this._bottleModel.SetPosition(this.SetDelay(d.Position, this._bottleModel.Position));
+
+            var actualPosition = this.SetDelay(d.Position, this._bottleModel.Position);
+
+            if(actualPosition.Z > d.Position.Z)
+            {
+                actualPosition += this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                actualPosition -= this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds / 1000;
+            }
+            
+
+            this._bottleModel.SetPosition(actualPosition);
 
             this._bottleModel.SetRotation(d.Rotation);
         }
@@ -58,6 +73,9 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this._animatedWaterwaves.Draw(this.Game.GraphicsDevice, view, projection);
             this._bottleModel.Draw(view, projection);
+
+
+            
         }
 
 

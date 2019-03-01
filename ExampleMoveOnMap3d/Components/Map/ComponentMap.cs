@@ -35,30 +35,30 @@ namespace ExampleMoveOnMap3d.Components.Map
         public override void Update(GameTime gameTime)
         {
             this._bottleModel.Update(gameTime);
+            this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
+
 
             this._bottleModel.SetOffsetRotation(new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0));
-
-
             this._bottleModel.AddPosition(new Vector3(this._componentInputs.Inputs.Move, 0), .3f);
+
             this._lastPositionZ = this._bottleModel.Position.Z;
 
-            this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
             var d = this._animatedWaterwaves.GetAngle(this._bottleModel.Position);
 
             var actualPosition = this.SetDelay(d.Position, this._bottleModel.Position);
 
-            if(actualPosition.Z > d.Position.Z)
-            {
-                actualPosition += this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            else
-            {
-                actualPosition -= this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds / 1000;
-            }
-            
 
+            //if(actualPosition.Z > d.Position.Z)
+            //{
+            //    actualPosition += this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //}
+            //else
+            //{
+            //    actualPosition -= this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds / 1000;
+            //}
+
+            this._bottleModel.SetSeaLevel(d.Position);
             this._bottleModel.SetPosition(actualPosition);
-
             this._bottleModel.SetRotation(d.Rotation);
         }
 

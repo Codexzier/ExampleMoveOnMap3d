@@ -12,9 +12,14 @@ namespace ExampleMoveOnMap3d.Components.Map
         public const float POWER = 600f;
         public const float FRICTION = 60f;
         public const float MASS = 80f;
+        public const float UPWARDTREND = 20f;
+        
+        public readonly Vector3 GRAVITY = new Vector3(0, 0, -20);
+
         public Vector3 EXTERNALFORCE = new Vector3(0, 0, -20) * MASS;
 
         public Vector3 Velocity = new Vector3();
+        public Vector3 SeaLevel = new Vector3();
 
         #endregion
 
@@ -71,6 +76,11 @@ namespace ExampleMoveOnMap3d.Components.Map
             }
         }
 
+        internal void SetSeaLevel(Vector3 position)
+        {
+            this.SeaLevel = position;
+        }
+
         private void IterateEffect(ModelMesh mesh, Matrix view, Matrix projection)
         {
             foreach (BasicEffect effect in mesh.Effects)
@@ -118,7 +128,21 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public void Update(GameTime gameTime)
         {
+            this.EXTERNALFORCE = this.GRAVITY * MASS;
+
+            var upwardForce = this.Position.Z < this.SeaLevel.Z ? this.CalcUpwardTrend() : 0f;
+
+            this.EXTERNALFORCE += new Vector3(0, 0, upwardForce);
+
             this.SetFriction(gameTime);
+        }
+
+        private float CalcUpwardTrend()
+        {
+            float upward = (this.SeaLevel.Z - this.Position.Z) * UPWARDTREND;
+
+
+            return upward;
         }
 
         private void SetFriction(GameTime gameTime)

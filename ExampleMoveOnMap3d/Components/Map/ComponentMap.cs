@@ -50,7 +50,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             //if(actualPosition.Z > d.Position.Z)
             //{
-                actualPosition += this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                actualPosition += this._bottleModel.PhysicData.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             //}
             //else
             //{

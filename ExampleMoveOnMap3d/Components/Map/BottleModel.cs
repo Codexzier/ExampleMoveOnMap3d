@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
+using Windows.UI.Notifications;
 
 namespace ExampleMoveOnMap3d.Components.Map
 {
@@ -11,10 +12,10 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public const float POWER = 600f;
         public const float FRICTION = 60f;
-        public const float MASS = 80f;
+        public const float MASS = 10f;
         public const float UPWARDTREND = 20f;
         
-        public readonly Vector3 GRAVITY = new Vector3(0, 0, -20);
+        public Vector3 GRAVITY = new Vector3(0, 0, -2.5f);
 
         public Vector3 EXTERNALFORCE = new Vector3(0, 0, -20) * MASS;
 
@@ -64,7 +65,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this._position += move * speed;
 
-            Debug.WriteLine($"Pos: {this._position}");
+            //Debug.WriteLine($"Pos: {this._position}");
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -123,16 +124,16 @@ namespace ExampleMoveOnMap3d.Components.Map
             effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1); 
             effect.DirectionalLight0.Direction = new Vector3(-1f, 1f, 1f);  
             effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10); 
-            
         }
 
         public void Update(GameTime gameTime)
         {
             this.EXTERNALFORCE = this.GRAVITY * MASS;
 
-            var upwardForce = this.Position.Z < this.SeaLevel.Z ? this.CalcUpwardTrend() : 0f;
+            var upwardForce = this.CalcUpwardTrend(); //this.Position.Z < this.SeaLevel.Z ? this.CalcUpwardTrend() : 0f;
 
-            this.EXTERNALFORCE += new Vector3(0, 0, upwardForce);
+            this.EXTERNALFORCE *= new Vector3(0, 0, upwardForce);
+            Debug.WriteLine($"External force: {this.EXTERNALFORCE}");
 
             this.SetFriction(gameTime);
         }
@@ -147,7 +148,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         private void SetFriction(GameTime gameTime)
         {
-            // TODO: Schräglage als Beschleunigung verwenden
+            // TODO: Schräglage als Beschleunigung verwenden?
             var velocityDirection = new Vector3();
 
             Vector3 friction = new Vector3(1, 1, .1f) * FRICTION;

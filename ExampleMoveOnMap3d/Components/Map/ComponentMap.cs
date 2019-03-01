@@ -29,7 +29,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             this._lastPositionZ = this._bottleModel.Position.Z;
 
-            this._effect = this.Game.Content.Load<Effect>("SimpleShadow");
+            //this._effect = this.Game.Content.Load<Effect>("SimpleShadow");
         }
 
         public override void Update(GameTime gameTime)
@@ -50,7 +50,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             //if(actualPosition.Z > d.Position.Z)
             //{
-            //    actualPosition += this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                actualPosition += this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             //}
             //else
             //{

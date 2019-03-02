@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ExampleMoveOnMap3d.Components.Map
 {
@@ -30,8 +29,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this._texture = texture;
         }
-
-
+        
         public void Initialize(GraphicsDevice graphicsDevice)
         {
             this._effect = new BasicEffect(graphicsDevice);
@@ -40,14 +38,7 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._effect.TextureEnabled = true;
             this._effect.Texture = this._texture;
 
-            //this._effect.EnableDefaultLighting();
-
-            //this._effect.LightingEnabled = true;
-            //this._effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1);
-            //this._effect.DirectionalLight0.Direction = new Vector3(0f, 0f, 1f);
-            //this._effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10);
-            //this._effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
-            //this._effect.EmissiveColor = new Vector3(1, 0, 0);
+            this._effect.EnableDefaultLighting();
 
             this._vertexPositions = this.RegenerateVertexBuffer(graphicsDevice);
         }
@@ -132,17 +123,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public void Update(GraphicsDevice graphicsDevice)
         {
-            this._effect.LightingEnabled = true;
-            this._effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1);
-            this._effect.DirectionalLight0.Direction = new Vector3(0f, 0f, 1f);
-            this._effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10);
-            this._effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
-            this._effect.EmissiveColor = new Vector3(1f, 1f, 1f);
-
-
             this._vertexPositions = this.RegenerateVertexBuffer(graphicsDevice);
-
-           // this._effect.World = Matrix.CreateTranslation(this._position);
         }
 
         internal void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection)
@@ -192,140 +173,6 @@ namespace ExampleMoveOnMap3d.Components.Map
             index.Add(localOffset + 0);
             index.Add(localOffset + 3);
             index.Add(localOffset + 2);
-        }
-
-
-        public CoordinateDetails GetAngle(Vector3 position)
-        {
-            // get the near vertex
-            DistanceAndPosition[] results = new DistanceAndPosition[9];
-
-            foreach (VertexPositionNormalTexture vertexPosition in this._vertexPositions)
-            {
-                float distanceP1 = Vector3.Distance(vertexPosition.Position + this._position, position);
-
-                for (int index = 0; index < results.Length; index++)
-                {
-                    if (results[index] == null || distanceP1 < results[index].Distance)
-                    {
-
-                        var newResult = new DistanceAndPosition(distanceP1, vertexPosition.Position);
-                        if (this.ResultExist(results, newResult))
-                        {
-                            break;
-                        }
-
-                        this.MoveResults(results, index);
-
-                        results[index] = newResult;
-
-                        break;
-                    }
-                }
-            }
-
-            // get Middle position
-            DistanceAndPosition middlePoint = results[0];
-
-            // front
-            var positionInLineWithMiddleX = results.Where(w => w.Position.X == middlePoint.Position.X);
-            var positionInLineWithMiddleY = results.Where(w => w.Position.Y == middlePoint.Position.Y);
-
-            var front = positionInLineWithMiddleX.Where(w => w.Position.Y < middlePoint.Position.Y);
-            var radiansX = front.Any() ? this.GetRadiantX(middlePoint.Position, front.First().Position) : 0;
-
-            var right = positionInLineWithMiddleY.Where(w => w.Position.X < middlePoint.Position.X);
-            var radiansY = right.Any() ? this.GetRadiantY(middlePoint.Position, right.First().Position) : 0;
-
-            var rotationState = new Vector3(radiansX, radiansY * -1, 0);
-
-            CoordinateDetails coordinateDetails = new CoordinateDetails
-            {
-                Position = middlePoint.Position,
-                Rotation = rotationState
-            };
-
-            return coordinateDetails;
-        }
-
-        private float GetRadiantX(Vector3 pos1, Vector3 pos2)
-        {
-            if (pos1.Y > pos2.Y)
-            {
-                return (float)Math.Atan2(pos1.Y - pos2.Y, pos2.Z - pos1.Z);
-            }
-
-            if (pos1.Z > pos2.Z)
-            {
-                return (float)Math.Atan2(pos2.Y - pos1.Y, pos1.Z - pos2.Z);
-            }
-
-            return (float)Math.Atan2(pos2.Y - pos1.Y, pos2.Z - pos1.Z);
-        }
-
-        private float GetRadiantY(Vector3 pos1, Vector3 pos2)
-        {
-            if (pos1.X > pos2.X)
-            {
-                return (float)Math.Atan2(pos1.X - pos2.X, pos2.Z - pos1.Z);
-            }
-
-            if (pos1.Z > pos2.Z)
-            {
-                return (float)Math.Atan2(pos1.X - pos2.X, pos1.Z - pos2.Z);
-            }
-
-            return (float)Math.Atan2(pos2.X - pos1.X, pos2.Z - pos1.Z);
-        }
-
-        private void MoveResults(DistanceAndPosition[] results, int startIndex)
-        {
-            for (int index = results.Length - 1; index > startIndex; index--)
-            {
-                if (index - 1 >= startIndex)
-                {
-                    results[index] = results[index - 1];
-                }
-            }
-        }
-
-        public bool ResultExist(DistanceAndPosition[] results, DistanceAndPosition checkResult)
-        {
-            for (int index = 0; index < results.Length; index++)
-            {
-                if (results[index] == null)
-                {
-                    break;
-                }
-
-                if (results[index].Distance.Equals(checkResult.Distance) &&
-                    results[index].Position.X == checkResult.Position.X &&
-                    results[index].Position.Y == checkResult.Position.Y)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public class DistanceAndPosition
-        {
-            public float Distance { get; set; } = 100000f;
-            public Vector3 Position { get; set; }
-
-            public DistanceAndPosition() { }
-
-            public DistanceAndPosition(float distance, Vector3 position)
-            {
-                this.Distance = distance;
-                this.Position = position;
-            }
-
-            public override string ToString()
-            {
-                return $"Distance: {this.Distance}, Position: {this.Position}";
-            }
         }
     }
 }

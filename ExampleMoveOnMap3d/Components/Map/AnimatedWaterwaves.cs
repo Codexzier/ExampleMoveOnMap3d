@@ -40,7 +40,7 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._effect.TextureEnabled = true;
             this._effect.Texture = this._texture;
 
-            //this._effect.EnableDefaultLighting();
+            this._effect.EnableDefaultLighting();
 
             //this._effect.LightingEnabled = true;
             //this._effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1);
@@ -132,12 +132,12 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public void Update(GraphicsDevice graphicsDevice)
         {
-            this._effect.LightingEnabled = true;
-            this._effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1);
-            this._effect.DirectionalLight0.Direction = new Vector3(0f, 0f, 1f);
-            this._effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10);
-            this._effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
-            this._effect.EmissiveColor = new Vector3(1f, 1f, 1f);
+            //this._effect.LightingEnabled = true;
+            //this._effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1);
+            //this._effect.DirectionalLight0.Direction = new Vector3(0f, 0f, 1f);
+            //this._effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10);
+            //this._effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
+            //this._effect.EmissiveColor = new Vector3(1f, 1f, 1f);
 
 
             this._vertexPositions = this.RegenerateVertexBuffer(graphicsDevice);
@@ -195,14 +195,19 @@ namespace ExampleMoveOnMap3d.Components.Map
         }
 
 
-        public CoordinateDetails GetAngle(Vector3 position)
+        public CoordinateDetails GetSeaLevelInformation(Vector3 position)
         {
             // get the near vertex
             DistanceAndPosition[] results = new DistanceAndPosition[9];
 
             foreach (VertexPositionNormalTexture vertexPosition in this._vertexPositions)
             {
-                float distanceP1 = Vector3.Distance(vertexPosition.Position + this._position, position);
+                // cut z value
+                var vertexPos = new Vector3(vertexPosition.Position.X + this._position.X, vertexPosition.Position.Y + this._position.Y, 0);
+                var pos = new Vector3(position.X, position.Y, 0f);
+
+                //float distanceP1 = Vector3.Distance(vertexPosition.Position + this._position, position);
+                float distanceP1 = Vector3.Distance(vertexPos, pos);
 
                 for (int index = 0; index < results.Length; index++)
                 {

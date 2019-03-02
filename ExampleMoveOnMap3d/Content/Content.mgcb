@@ -44,9 +44,3 @@
 /processorParam:TextureFormat=Color
 /build:rpgTile029.png
 
-#begin SimpleShadow.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:SimpleShadow.fx
-

@@ -31,6 +31,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public Vector3 RelativeOffsetPosition { get; set; }
         public Vector3 Position => this._position;
+        public Vector3 Rotation => this._rotation;
 
         public BottleModel(Vector3 offsetPosition, Vector3 offsetRotation, float scale, Model model)
         {
@@ -59,7 +60,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this._position += move * speed;
 
-            Debug.WriteLine($"Pos: {this._position}");
+            //Debug.WriteLine($"Pos: {this._position}");
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -118,23 +119,8 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public void Update(GameTime gameTime)
         {
-            this.SetFriction(gameTime);
         }
 
-        private void SetFriction(GameTime gameTime)
-        {
-            // TODO: Schräglage als Beschleunigung verwenden
-            var velocityDirection = new Vector3();
 
-            Vector3 friction = new Vector3(1, 1, .1f) * FRICTION;
-            Vector3 powerDirection = (POWER * velocityDirection) + this.EXTERNALFORCE;
-
-            Vector3 velocityChange = (2.0f / MASS * (powerDirection - friction * this.Velocity)) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            this.Velocity += new Vector3(
-                (float)(velocityChange.X < 0 ? -Math.Sqrt(-velocityChange.X) : Math.Sqrt(velocityChange.X)),
-                (float)(velocityChange.Y < 0 ? -Math.Sqrt(-velocityChange.Y) : Math.Sqrt(velocityChange.Y)),
-                (float)(velocityChange.Z < 0 ? -Math.Sqrt(-velocityChange.Z) : Math.Sqrt(velocityChange.Z)));
-        }
     }
 }

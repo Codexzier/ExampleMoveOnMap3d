@@ -1,6 +1,7 @@
 ﻿using ExampleMoveOnMap3d.Components.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace ExampleMoveOnMap3d.Components.Map
 {
@@ -10,7 +11,18 @@ namespace ExampleMoveOnMap3d.Components.Map
         private readonly ComponentInputs _componentInputs;
         private AnimatedWaterwaves _animatedWaterwaves;
         private BottleModel _bottleModel;
-        private Effect _effect;
+        private BottleModel _bottleModel2;
+
+        // normal
+        private PhysicHelper _helper1 = new PhysicHelper();
+        // the bottle
+        private PhysicHelper _helper2 = new PhysicHelper(72.75f, .7f, 5f);
+
+        private PidController _pidController = new PidController(2, .5, .05, 200, -200);
+
+        private PidController _pidControllerX = new PidController(2, .5, .05, 200, -200);
+        private PidController _pidControllerY = new PidController(2, .5, .05, 200, -200);
+        private PidController _pidControllerZ = new PidController(2, .5, .05, 200, -200);
 
         public ComponentMap(Game game, ComponentInputs componentInputs) : base(game)
         {
@@ -24,58 +36,119 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._animatedWaterwaves.Initialize(this.Game.GraphicsDevice);
 
             var bottle = this.Game.Content.Load<Model>("bottle");
-            this._bottleModel = new BottleModel(new Vector3(), new Vector3(MathHelper.ToRadians(90), MathHelper.ToRadians(90), 0), 1f, bottle);
+            this._bottleModel = new BottleModel(new Vector3(0,0,-2), new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0), 1f, bottle);
             this._bottleModel.SetPosition(new Vector3(10,10,0));
 
-            this._lastPositionZ = this._bottleModel.Position.Z;
+            this._bottleModel2 = new BottleModel(new Vector3(0, 0, -2), new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0), 1f, bottle);
+            this._bottleModel2.SetPosition(new Vector3(5, 5, 0));
 
-            this._effect = this.Game.Content.Load<Effect>("SimpleShadow");
+            this._lastPositionZ = this._bottleModel.Position.Z;
+            this._lastRotation = this._bottleModel.Rotation;
         }
+
+        private Vector3 _lastPosition = new Vector3();
+        private Vector3 _lastRotation = new Vector3();
+        private float _reducedUp = 0;
+        private float _lastPositionZ = 0;
+
 
         public override void Update(GameTime gameTime)
         {
             this._bottleModel.Update(gameTime);
 
-            this._bottleModel.SetOffsetRotation(new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0));
 
-
+            // TODO: must going to refactore this chaos -.-
             this._bottleModel.AddPosition(new Vector3(this._componentInputs.Inputs.Move, 0), .3f);
             this._lastPositionZ = this._bottleModel.Position.Z;
 
             this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
-            var d = this._animatedWaterwaves.GetAngle(this._bottleModel.Position);
+            var seaLevel = this._animatedWaterwaves.GetSeaLevelInformation(this._bottleModel.Position);
 
-            var actualPosition = this.SetDelay(d.Position, this._bottleModel.Position);
+            var resultBottle4 = this._helper2.CalculateUptrustValue(seaLevel.Position.Z, this._bottleModel.Position.Z);
 
-            if(actualPosition.Z > d.Position.Z)
+            if (resultBottle4 > 0)
             {
-                actualPosition += this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (resultBottle4 > this._reducedUp)
+                {
+                    this._reducedUp = resultBottle4;
+                }
+
+                resultBottle4 = 0;
             }
-            else
-            {
-                actualPosition -= this._bottleModel.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds / 1000;
-            }
+
+            //var velocityChange = new Vector3(this._bottleModel.Position.X, 
+            //                                 this._bottleModel.Position.Y, 
+            //                                 this._lastPositionZ + (resultBottle4 / 100f));
+
+         
+
+            this._pidController.Proportional = .02;
+            this._pidController.Integral = .05;
+            this._pidController.Derivative = .005;
+
+            this._pidController.SetPoint = resultBottle4;
+            var ch = (float)this._pidController.ControlVariable(gameTime.ElapsedGameTime);
+            this._pidController.ProcessVariable = ch;
+
+            Debug.WriteLine($"{ch}");
+
+            var velocityChange = new Vector3(this._bottleModel.Position.X,
+                                        this._bottleModel.Position.Y,
+                                        ch);
+
+            //Debug.WriteLine($"{resultBottle4:N1}, position: {velocityChange.Z:N1}");
+            this._lastPositionZ = velocityChange.Z;
             
+            this._bottleModel.SetPosition(velocityChange);
 
-            this._bottleModel.SetPosition(actualPosition);
+            var rotationChange = seaLevel.Rotation - this._lastRotation;
+            //Debug.Write($"Bottle: {this._bottleModel.Rotation:N1}, lastRotate: {this._lastRotation.Z:N1}, rotation change: {rotationChange}, ");
+            //seaLevel.Rotation =  this._bottleModel.Rotation + (rotationChange /70);
+            //Debug.WriteLine($"resultRotation: {seaLevel.Rotation:N1}");
 
-            this._bottleModel.SetRotation(d.Rotation);
-        }
+            this._bottleModel.SetRotation(seaLevel.Rotation);
 
-        private float _lastPositionZ = 0;
+            this._lastRotation = this._bottleModel.Rotation;
 
-        private Vector3 SetDelay(Vector3 waterPosition, Vector3 objectPosition)
-        {
-            return new Vector3(objectPosition.X, objectPosition.Y, (waterPosition.Z + this._lastPositionZ) / 2);
+
+            var seaLevel2 = this._animatedWaterwaves.GetSeaLevelInformation(this._bottleModel2.Position);
+            this._bottleModel2.SetPosition(seaLevel2.Position);
+            this._bottleModel2.SetRotation(seaLevel2.Rotation);
+
+            //this._pidControllerX.Proportional = .3;
+            //this._pidControllerX.Integral = .0001;
+            //this._pidControllerX.Derivative = .00005;
+
+            //this._pidControllerY.Proportional = this._pidControllerX.Proportional;
+            //this._pidControllerZ.Proportional = this._pidControllerX.Proportional;
+
+            //this._pidControllerY.Integral = this._pidControllerX.Integral;
+            //this._pidControllerZ.Integral = this._pidControllerX.Integral;
+
+            //this._pidControllerY.Derivative = this._pidControllerX.Derivative;
+            //this._pidControllerZ.Derivative = this._pidControllerX.Derivative;
+
+            //this._pidControllerX.SetPoint = seaLevel.Rotation.X;
+            //this._pidControllerY.SetPoint = seaLevel.Rotation.Y;
+            //this._pidControllerZ.SetPoint = seaLevel.Rotation.Z;
+
+            //var x = (float)this._pidControllerX.ControlVariable(gameTime.ElapsedGameTime);
+            //var y = (float)this._pidControllerY.ControlVariable(gameTime.ElapsedGameTime);
+            //var z = (float)this._pidControllerZ.ControlVariable(gameTime.ElapsedGameTime);
+
+            //seaLevel.Rotation = new Vector3(x, y, z); 
+
+            //this._bottleModel.SetRotation(seaLevel.Rotation);
+            //this._pidControllerX.ProcessVariable = this._bottleModel.Rotation.X;
+            //this._pidControllerY.ProcessVariable = this._bottleModel.Rotation.Y;
+            //this._pidControllerZ.ProcessVariable = this._bottleModel.Rotation.Z;
         }
 
         public void DrawContent(Matrix view, Matrix projection)
         {
             this._animatedWaterwaves.Draw(this.Game.GraphicsDevice, view, projection);
             this._bottleModel.Draw(view, projection);
-
-
-            
+            this._bottleModel2.Draw(view, projection);
         }
 
 

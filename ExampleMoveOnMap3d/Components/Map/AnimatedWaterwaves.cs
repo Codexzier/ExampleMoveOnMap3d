@@ -102,10 +102,15 @@ namespace ExampleMoveOnMap3d.Components.Map
                         aaY1 = aaY1 % 1f;
                     }
 
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + this._squareLength, height1), Vector3.Up, new Vector2(aaX, aaY1)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + this._squareLength, height2), Vector3.Up, new Vector2(aaX1, aaY1)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + 0, height3), Vector3.Up, new Vector2(aaX, aaY)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + 0, height4), Vector3.Up, new Vector2(aaX1, aaY)));
+                    var verticePos1 = new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + this._squareLength, height1);
+                    var verticePos2 = new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + this._squareLength, height2);
+                    var verticePos3 = new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + 0, height3);
+                    var verticePos4 = new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + 0, height4);
+
+                    vertices.Add(new VertexPositionNormalTexture(verticePos1, Vector3.Up, new Vector2(aaX, aaY1)));
+                    vertices.Add(new VertexPositionNormalTexture(verticePos2, Vector3.Up, new Vector2(aaX1, aaY1)));
+                    vertices.Add(new VertexPositionNormalTexture(verticePos3, Vector3.Up, new Vector2(aaX, aaY)));
+                    vertices.Add(new VertexPositionNormalTexture(verticePos4, Vector3.Up, new Vector2(aaX1, aaY)));
                 }
             }
 

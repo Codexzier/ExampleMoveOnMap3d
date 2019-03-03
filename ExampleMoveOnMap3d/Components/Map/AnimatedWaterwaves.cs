@@ -7,21 +7,20 @@ namespace ExampleMoveOnMap3d.Components.Map
 {
     public class AnimatedWaterwaves
     {
-        private BasicEffect _effect;
+        private readonly int _tilesX = 20;
+        private readonly int _tilesY = 20;
+        private readonly float _squareLength = 1f;
 
-        private int _tilesX = 20;
-        private int _tilesY = 20;
+        private float _waveXStart = 0f;
+        private float _waveYStart = 0f;
 
         private VertexBuffer _vertexBuffer;
         private IndexBuffer _indexBuffer;
         private int _vertexCount;
         private int _indexCount;
 
-        private float _waveXStart = 0f;
-        private float _waveYStart = 0f;
-
-        private Texture2D _texture;
-        private Vector3 _position = new Vector3(0, 0, 0);
+        private BasicEffect _effect;
+        private readonly Texture2D _texture;
 
         private List<VertexPositionNormalTexture> _vertexPositions;
 
@@ -103,12 +102,10 @@ namespace ExampleMoveOnMap3d.Components.Map
                         aaY1 = aaY1 % 1f;
                     }
 
-                    float squareLength = 1f;
-
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + 0, (iY * squareLength) + squareLength, height1), Vector3.Up, new Vector2(aaX, aaY1)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + squareLength, (iY * squareLength) + squareLength, height2), Vector3.Up, new Vector2(aaX1, aaY1)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + 0, (iY * squareLength) + 0, height3), Vector3.Up, new Vector2(aaX, aaY)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + squareLength, (iY * squareLength) + 0, height4), Vector3.Up, new Vector2(aaX1, aaY)));
+                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + this._squareLength, height1), Vector3.Up, new Vector2(aaX, aaY1)));
+                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + this._squareLength, height2), Vector3.Up, new Vector2(aaX1, aaY1)));
+                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + 0, height3), Vector3.Up, new Vector2(aaX, aaY)));
+                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + 0, height4), Vector3.Up, new Vector2(aaX1, aaY)));
                 }
             }
 

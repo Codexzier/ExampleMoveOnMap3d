@@ -9,6 +9,8 @@ namespace ExampleMoveOnMap3d.Components.Map
     {
         private const float _speed = 0.3f;
         private readonly ComponentInputs _componentInputs;
+        //private AnimatedWaterwaves _animatedWaterwaves;
+        public AnimatedWaterwavesBuffered AnimatedWaterwavesBuffered;
         private AnimatedWaterwaves _animatedWaterwaves;
         private BottleModel _bottleModel;
         private BottleModel _bottleModel2;
@@ -32,13 +34,17 @@ namespace ExampleMoveOnMap3d.Components.Map
         public override void Initialize()
         {
             var texture = this.Game.Content.Load<Texture2D>("rpgTile029");
-            this._animatedWaterwaves = new AnimatedWaterwaves(texture);
-            this._animatedWaterwaves.Initialize(this.Game.GraphicsDevice);
 
+            // This is the unbuffered waves
+            //this._animatedWaterwaves = new AnimatedWaterwaves(texture);
+            //this._animatedWaterwaves.Initialize(this.Game.GraphicsDevice);
             var bottle = this.Game.Content.Load<Model>("bottle");
             this._bottleModel = new BottleModel(new Vector3(0,0,-2), new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0), 1f, bottle);
             this._bottleModel.SetPosition(new Vector3(10,10,0));
 
+            // the buffered waves
+            this.AnimatedWaterwavesBuffered = new AnimatedWaterwavesBuffered(texture);
+            this.AnimatedWaterwavesBuffered.Initialize(this.Game.GraphicsDevice);
             this._bottleModel2 = new BottleModel(new Vector3(0, 0, -2), new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0), 1f, bottle);
             this._bottleModel2.SetPosition(new Vector3(5, 5, 0));
 
@@ -54,9 +60,18 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public override void Update(GameTime gameTime)
         {
+            RasterizerState raster = new RasterizerState();
+            raster.CullMode = CullMode.CullCounterClockwiseFace;
+            raster.FillMode = FillMode.WireFrame;
+            this.Game.GraphicsDevice.RasterizerState = raster;
             this._bottleModel.Update(gameTime);
 
+            // This is the unbuffered waves
+            //this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
 
+            // the buffered waves
+            this.AnimatedWaterwavesBuffered.Update();
+        }
             // TODO: must going to refactore this chaos -.-
             this._bottleModel.AddPosition(new Vector3(this._componentInputs.Inputs.Move, 0), .3f);
             this._lastPositionZ = this._bottleModel.Position.Z;
@@ -75,6 +90,9 @@ namespace ExampleMoveOnMap3d.Components.Map
 
                 resultBottle4 = 0;
             }
+        public void DrawContent(Matrix view, Matrix projection)
+        {
+            this.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             //var velocityChange = new Vector3(this._bottleModel.Position.X, 
             //                                 this._bottleModel.Position.Y, 
@@ -138,6 +156,14 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             //seaLevel.Rotation = new Vector3(x, y, z); 
 
+            // the buffered waves
+            for (int iY = 0; iY < 10; iY++)
+            {
+                for (int iX = 0; iX < 10; iX++)
+                {
+                    this.AnimatedWaterwavesBuffered.Draw(this.Game.GraphicsDevice, view, projection, new Vector3(200 - (iX * 20), 200 - (iY * 20), 0), 400 * iY);
+                }
+            }
             //this._bottleModel.SetRotation(seaLevel.Rotation);
             //this._pidControllerX.ProcessVariable = this._bottleModel.Rotation.X;
             //this._pidControllerY.ProcessVariable = this._bottleModel.Rotation.Y;
@@ -150,7 +176,5 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._bottleModel.Draw(view, projection);
             this._bottleModel2.Draw(view, projection);
         }
-
-
     }
 }

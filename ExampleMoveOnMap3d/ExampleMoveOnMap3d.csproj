@@ -105,8 +105,9 @@
     </Compile>
     <Compile Include="Components\Inputs\ComponentInputs.cs" />
     <Compile Include="Components\Inputs\InputData.cs" />
+    <Compile Include="Components\Map\AnimatedWaterwavesBuffered.cs" />
     <Compile Include="Components\Map\AnimatedWaterwaves.cs" />
-    <Compile Include="Components\Map\BottleModel.cs" />
+    <Compile Include="Components\Map\BufferedWave.cs" />
     <Compile Include="Components\Map\ComponentMap.cs" />
     <Compile Include="Components\Map\CoordinateDetails.cs" />
     <Compile Include="Components\Map\PhysicHelper.cs" />
@@ -123,7 +124,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Content\bottle.fbx" />
+    <None Include="Content\Debug.spritefont" />
     <None Include="ExampleMoveOnMap3d_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

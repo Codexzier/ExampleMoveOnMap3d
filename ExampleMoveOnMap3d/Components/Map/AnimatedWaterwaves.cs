@@ -2,27 +2,25 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ExampleMoveOnMap3d.Components.Map
 {
     public class AnimatedWaterwaves
     {
-        private BasicEffect _effect;
+        private readonly int _tilesX = 20;
+        private readonly int _tilesY = 20;
+        private readonly float _squareLength = 1f;
 
-        private int _tilesX = 20;
-        private int _tilesY = 20;
+        private float _waveStartX = 0f;
+        private float _waveStartY = 0f;
 
         private VertexBuffer _vertexBuffer;
         private IndexBuffer _indexBuffer;
         private int _vertexCount;
         private int _indexCount;
 
-        private float _waveXStart = 0f;
-        private float _waveYStart = 0f;
-
-        private Texture2D _texture;
-        private Vector3 _position = new Vector3(0, 0, 0);
+        private BasicEffect _effect;
+        private readonly Texture2D _texture;
 
         private List<VertexPositionNormalTexture> _vertexPositions;
 
@@ -30,8 +28,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this._texture = texture;
         }
-
-
+        
         public void Initialize(GraphicsDevice graphicsDevice)
         {
             this._effect = new BasicEffect(graphicsDevice);
@@ -42,13 +39,6 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             this._effect.EnableDefaultLighting();
 
-            //this._effect.LightingEnabled = true;
-            //this._effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1);
-            //this._effect.DirectionalLight0.Direction = new Vector3(0f, 0f, 1f);
-            //this._effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10);
-            //this._effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
-            //this._effect.EmissiveColor = new Vector3(1, 0, 0);
-
             this._vertexPositions = this.RegenerateVertexBuffer(graphicsDevice);
         }
 
@@ -56,8 +46,8 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this.ClearBuffers();
 
-            this._waveXStart += .05f;
-            this._waveYStart += .2f;
+            this._waveStartX += .05f;
+            this._waveStartY += .2f;
 
             List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
             List<int> index = new List<int>();
@@ -65,6 +55,7 @@ namespace ExampleMoveOnMap3d.Components.Map
             float setHeight = 1.4f;
 
             float waveLengthX = 10f;
+            float waveLengthY = 16f;
             float aa = 5f / this._tilesY;
             
             for (int iY = 0; iY < this._tilesY; iY++)
@@ -72,11 +63,9 @@ namespace ExampleMoveOnMap3d.Components.Map
                 for (int iX = 0; iX < this._tilesX; iX++)
                 {
                     this.SetIndex(ref index, vertices.Count);
-
-                    float waveLengthY = 16f;
-
-                    float waveX = iX + this._waveXStart;
-                    float waveY = iY + this._waveYStart;
+                    
+                    float waveX = iX + this._waveStartX;
+                    float waveY = iY + this._waveStartY;
 
                     float heightY = (float)Math.Sin(((waveY + 1) * Math.PI) / waveLengthY);
                     float heigthX1 = (float)Math.Sin((float)(waveX * Math.PI) / waveLengthX);
@@ -112,12 +101,15 @@ namespace ExampleMoveOnMap3d.Components.Map
                         aaY1 = aaY1 % 1f;
                     }
 
-                    float squareLength = 1f;
+                    var verticePos1 = new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + this._squareLength, height1);
+                    var verticePos2 = new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + this._squareLength, height2);
+                    var verticePos3 = new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + 0, height3);
+                    var verticePos4 = new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + 0, height4);
 
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + 0, (iY * squareLength) + squareLength, height1), Vector3.Up, new Vector2(aaX, aaY1)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + squareLength, (iY * squareLength) + squareLength, height2), Vector3.Up, new Vector2(aaX1, aaY1)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + 0, (iY * squareLength) + 0, height3), Vector3.Up, new Vector2(aaX, aaY)));
-                    vertices.Add(new VertexPositionNormalTexture(new Vector3((iX * squareLength) + squareLength, (iY * squareLength) + 0, height4), Vector3.Up, new Vector2(aaX1, aaY)));
+                    vertices.Add(new VertexPositionNormalTexture(verticePos1, Vector3.Up, new Vector2(aaX, aaY1)));
+                    vertices.Add(new VertexPositionNormalTexture(verticePos2, Vector3.Up, new Vector2(aaX1, aaY1)));
+                    vertices.Add(new VertexPositionNormalTexture(verticePos3, Vector3.Up, new Vector2(aaX, aaY)));
+                    vertices.Add(new VertexPositionNormalTexture(verticePos4, Vector3.Up, new Vector2(aaX1, aaY)));
                 }
             }
 
@@ -141,8 +133,6 @@ namespace ExampleMoveOnMap3d.Components.Map
 
 
             this._vertexPositions = this.RegenerateVertexBuffer(graphicsDevice);
-
-           // this._effect.World = Matrix.CreateTranslation(this._position);
         }
 
         internal void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection)

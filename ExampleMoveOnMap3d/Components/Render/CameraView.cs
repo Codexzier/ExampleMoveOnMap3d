@@ -1,4 +1,5 @@
-﻿using ExampleMoveOnMap3d.Components.Map;
+﻿using System;
+using ExampleMoveOnMap3d.Components.Map;
 using Microsoft.Xna.Framework;
 using Windows.UI.ViewManagement;
 
@@ -9,8 +10,12 @@ namespace ExampleMoveOnMap3d.Components.Render
         private readonly Game _game;
         private readonly ComponentMap _componentContent;
 
-        public Matrix View { get; private set; }
+        public Matrix View => Matrix.CreateLookAt(this._position, this._target, Vector3.Backward);
         public Matrix Projection { get; private set; }
+
+        private float _aspectRatio;
+        private Vector3 _position;
+        private Vector3 _target;
 
         public CameraView(Game game, ComponentMap componentMap)
         {
@@ -20,16 +25,21 @@ namespace ExampleMoveOnMap3d.Components.Render
 
         public void Initialize()
         {
-            var aspectRatio = this.GetAspectRatio();
-            var position = new Vector3(-1f, -20f, 20f);
-            var target = new Vector3(10, 10, 0);
+            this._aspectRatio = this.GetAspectRatio();
+            this._position = new Vector3(230f, -4f, 40f);
+            this._target = new Vector3(130, 100, 0);
             var farPlaneDistance = 10000;
 
-            this.View = Matrix.CreateLookAt(position, target, Vector3.Backward);
             this.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                        aspectRatio,
+                                                                        this._aspectRatio,
                                                                         1,
                                                                         farPlaneDistance);
+        }
+
+        internal void AddMove(Vector3 move)
+        {
+            this._position += move;
+            this._target += move;
         }
 
         public void Draw()

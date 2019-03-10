@@ -1,2 +1,2 @@
 # ExampleMoveOnMap3d - Performancetest
-Kleines Beispiel mit MonoGame. 3d Objekte laden und zu einer Karte formieren, die man bewegen kann.
+Zeigt ein paar Tests mit 3d Objekten und zeigt dabei aktuelle die FPS an.

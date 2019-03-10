@@ -33,7 +33,7 @@ namespace ExampleMoveOnMap3d.Components.Render
 
         public override void Update(GameTime gameTime)
         {
-            this._cameraView.AddMove(new Vector3(this._componentInputs.Inputs.MoveX, this._componentInputs.Inputs.MoveY, 0));
+            //this._cameraView.AddMove(new Vector3(this._componentInputs.Inputs.MoveX, this._componentInputs.Inputs.MoveY, 0));
         }
 
         public override void Draw(GameTime gameTime)

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ExampleMoveOnMap3d.Components.Map
 {
@@ -23,6 +24,8 @@ namespace ExampleMoveOnMap3d.Components.Map
         private readonly Texture2D _texture;
 
         private List<VertexPositionNormalTexture> _vertexPositions;
+
+        private Vector3 _position = new Vector3();
 
         public AnimatedWaterwaves(Texture2D texture)
         {
@@ -124,14 +127,6 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public void Update(GraphicsDevice graphicsDevice)
         {
-            //this._effect.LightingEnabled = true;
-            //this._effect.DirectionalLight0.DiffuseColor = new Vector3(1f, 1f, 1);
-            //this._effect.DirectionalLight0.Direction = new Vector3(0f, 0f, 1f);
-            //this._effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10);
-            //this._effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
-            //this._effect.EmissiveColor = new Vector3(1f, 1f, 1f);
-
-
             this._vertexPositions = this.RegenerateVertexBuffer(graphicsDevice);
         }
 

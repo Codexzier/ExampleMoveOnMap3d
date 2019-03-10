@@ -26,8 +26,9 @@ namespace ExampleMoveOnMap3d.Components.Render
         public void Initialize()
         {
             this._aspectRatio = this.GetAspectRatio();
-            this._position = new Vector3(230f, -4f, 40f);
-            this._target = new Vector3(130, 100, 0);
+            //this._position = new Vector3(230f, -4f, 40f);
+            this._position = new Vector3(20f, -4f, 20f);
+            this._target = new Vector3(10, 10, 0);
             var farPlaneDistance = 10000;
 
             this.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,

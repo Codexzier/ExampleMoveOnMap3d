@@ -66,12 +66,16 @@ namespace ExampleMoveOnMap3d.Components.Map
             this.Game.GraphicsDevice.RasterizerState = raster;
 
             this._bottleModel.Update(gameTime);
+            this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
 
             // the buffered waves
             //this.AnimatedWaterwavesBuffered.Update();
         
             // TODO: must going to refactore this chaos -.-
+
+            this._bottleModel.SetOffsetRotation(new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0));
             this._bottleModel.AddPosition(new Vector3(this._componentInputs.Inputs.Move, 0), .3f);
+
             this._lastPositionZ = this._bottleModel.Position.Z;
 
             // This is the unbuffered waves

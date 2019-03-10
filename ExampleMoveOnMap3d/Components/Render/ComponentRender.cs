@@ -1,4 +1,5 @@
-﻿using ExampleMoveOnMap3d.Components.Map;
+﻿using ExampleMoveOnMap3d.Components.Inputs;
+using ExampleMoveOnMap3d.Components.Map;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,12 +14,14 @@ namespace ExampleMoveOnMap3d.Components.Render
 
 
         private readonly CameraView _cameraView;
+        private readonly ComponentInputs _componentInputs;
         private readonly ComponentMap _componentContent;
 
-        public ComponentRender(Game game, ComponentMap componentContent) : base(game)
+        public ComponentRender(Game game, ComponentInputs componentInputs, ComponentMap componentContent) : base(game)
         {
             this._cameraView = new CameraView(game, componentContent);
             this._cameraView.Initialize();
+            this._componentInputs = componentInputs;
             this._componentContent = componentContent;
         }
 
@@ -26,6 +29,11 @@ namespace ExampleMoveOnMap3d.Components.Render
         {
             this._spriteBatch = new SpriteBatch(this.Game.GraphicsDevice);
             this._spriteFont = this.Game.Content.Load<SpriteFont>("Debug");
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            this._cameraView.AddMove(new Vector3(this._componentInputs.Inputs.MoveX, this._componentInputs.Inputs.MoveY, 0));
         }
 
         public override void Draw(GameTime gameTime)

@@ -13,6 +13,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         private readonly int _tilesX = 20;
         private readonly int _tilesY = 20;
         private readonly float _squareLength = 1f;
+        private float _textureSize;
 
         public VertexBuffer VertexBuffer;
         public IndexBuffer IndexBuffer;
@@ -24,10 +25,11 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         public const float SetHeight = 1.4f;
         public const int WaveLengthX = 10;
-        public const int WaveLengthY = 16;
+        public const int WaveLengthY = 10;
 
         public void Initialize(int step, GraphicsDevice graphicsDevice)
         {
+            this._textureSize = 5f / this._tilesY;
             this.VertexPositions = this.GenerateVertexBuffer(step,  graphicsDevice);
         }
 
@@ -50,9 +52,6 @@ namespace ExampleMoveOnMap3d.Components.Map
             List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
             List<int> index = new List<int>();
 
-            
-            float aa = 5f / this._tilesY;
-
             for (int iY = 0; iY < this._tilesY; iY++)
             {
                 for (int iX = 0; iX < this._tilesX; iX++)
@@ -62,44 +61,21 @@ namespace ExampleMoveOnMap3d.Components.Map
                     float waveX = iX + waveStartX;
                     float waveY = iY + waveStartY;
 
-                    //float heightY = (float)Math.Sin(((waveY + 1) * Math.PI) / WaveLengthY);
-                    //float heigthX1 = (float)Math.Sin((float)(waveX * Math.PI) / WaveLengthX);
-                    float height1 = this.GetHeight(waveX, waveY, 0, 1);// (heigthX1 + heightY) * SetHeight;
+                    float height1 = this.GetHeight(waveX, waveY, 0, 1);
+                    float height2 = this.GetHeight(waveX, waveY, 1, 1); 
+                    float height3 = this.GetHeight(waveX, waveY); 
+                    float height4 = this.GetHeight(waveX, waveY, 1, 0);
 
-                    //float heightY2 = (float)Math.Sin(((waveY + 1) * Math.PI) / WaveLengthY);
-                    //float heigthX2 = (float)Math.Sin((float)((waveX + 1) * Math.PI) / WaveLengthX);
-                    float height2 = this.GetHeight(waveX, waveY, 1, 1); //(heigthX2 + heightY2) * SetHeight;
-
-                    //float heightY3 = (float)Math.Sin((waveY * Math.PI) / WaveLengthY);
-                    //float heigthX3 = (float)Math.Sin((float)(waveX * Math.PI) / WaveLengthX);
-                    float height3 = this.GetHeight(waveX, waveY); // (heigthX3 + heightY3) * SetHeight;
-
-                    //float heightY4 = (float)Math.Sin((waveY * Math.PI) / WaveLengthY);
-                    //float heigthX4 = (float)Math.Sin((float)((waveX + 1) * Math.PI) / WaveLengthX);
-                    float height4 = this.GetHeight(waveX, waveY, 1, 0); //(heigthX4 + heightY4) * SetHeight;
-
-                    float aaX = aa * iX;
-                    float aaY = aa * iY;
-
-                    float aaX1 = (aa * iX) + aa;
-                    float aaY1 = (aa * iY) + aa;
-
-                    if (aaX > 1f)
-                    {
-                        aaX = aaX % 1f;
-                        aaX1 = aaX1 % 1f;
-                    }
-
-                    if (aaY > 1f)
-                    {
-                        aaY = aaY % 1f;
-                        aaY1 = aaY1 % 1f;
-                    }
-
-                    var verticePos1 = new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + this._squareLength, height1);
+                    var verticePos1 = new Vector3((iX * this._squareLength), (iY * this._squareLength) + this._squareLength, height1);
                     var verticePos2 = new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + this._squareLength, height2);
-                    var verticePos3 = new Vector3((iX * this._squareLength) + 0, (iY * this._squareLength) + 0, height3);
-                    var verticePos4 = new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength) + 0, height4);
+                    var verticePos3 = new Vector3((iX * this._squareLength), (iY * this._squareLength), height3);
+                    var verticePos4 = new Vector3((iX * this._squareLength) + this._squareLength, (iY * this._squareLength), height4);
+
+                    float aaX = this.GetTextureCoordinate(iX); 
+                    float aaY = this.GetTextureCoordinate(iY);
+
+                    float aaX1 = this.GetTextureCoordinate(iX) + this._textureSize;  
+                    float aaY1 = this.GetTextureCoordinate(iY) + this._textureSize; 
 
                     vertices.Add(new VertexPositionNormalTexture(verticePos1, Vector3.Up, new Vector2(aaX, aaY1)));
                     vertices.Add(new VertexPositionNormalTexture(verticePos2, Vector3.Up, new Vector2(aaX1, aaY1)));
@@ -117,6 +93,18 @@ namespace ExampleMoveOnMap3d.Components.Map
             return vertices;
         }
 
+
+        private float GetTextureCoordinate( int index)
+        {
+            var textureCoordinate = this._textureSize * index;
+
+            if(textureCoordinate >= 1f)
+            {
+                textureCoordinate %= 1f;
+            }
+
+            return textureCoordinate;
+        }
 
 
         private void InitVertexBuffer(GraphicsDevice graphicsDevice, List<VertexPositionNormalTexture> vertices)

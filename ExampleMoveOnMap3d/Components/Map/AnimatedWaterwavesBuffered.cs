@@ -16,7 +16,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this._texture = texture;
         }
-        
+
         public void Initialize(GraphicsDevice graphicsDevice)
         {
             this._effect = new BasicEffect(graphicsDevice);
@@ -26,7 +26,7 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._effect.Texture = this._texture;
 
             this._effect.EnableDefaultLighting();
-
+            
             // is estimated
             int bufferIndexMay = 1600;
 
@@ -39,9 +39,12 @@ namespace ExampleMoveOnMap3d.Components.Map
             }
         }
 
+        /// <summary>
+        /// Update the index number
+        /// </summary>
         public void Update()
         {
-            if(this.Index >= this._dictionaryVertexPositions.Count - 1)
+            if (this.Index >= this._dictionaryVertexPositions.Count - 1)
             {
                 this.Index = 0;
             }
@@ -51,21 +54,41 @@ namespace ExampleMoveOnMap3d.Components.Map
             }
         }
 
-        internal void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection)
+        internal void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 offsetPosition, int offsetIndex)
         {
             this._effect.View = view;
             this._effect.Projection = projection;
 
-            var item = this._dictionaryVertexPositions[this.Index];
+            var index = this.GetIndex(this.Index + offsetIndex);
+            var item = this._dictionaryVertexPositions[index];
 
             graphicsDevice.SetVertexBuffer(item.VertexBuffer);
             graphicsDevice.Indices = item.IndexBuffer;
+
+            this._effect.World = Matrix.CreateTranslation(offsetPosition);
 
             foreach (EffectPass pass in this._effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, item.VertexCount);
             }
+        }
+
+        /// <summary>
+        /// Return the valid index number.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private int GetIndex(int index)
+        {
+            if (index >= this._dictionaryVertexPositions.Count)
+            {
+                index -= this._dictionaryVertexPositions.Count;
+
+                return this.GetIndex(index);
+            }
+
+            return index;
         }
     }
 }

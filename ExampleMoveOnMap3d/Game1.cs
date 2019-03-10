@@ -1,8 +1,8 @@
 ﻿/// #########################################################################################################
 ///
 ///  Blog: Meine Welt in meinem Kopf
-///  Post: 3d Karte bewegen (MonoGame)
-///  Postdate: 10.02.2019
+///  Post: 3d Karte bewegen - Waterwaves (MonoGame)
+///  Postdate: 10.03.2019
 ///  --------------------------------------------------------------------------------------------------------
 ///  Kurze Information:
 ///  Diese Solution dient als Quellcode Beispiel und zeigt lediglich 
@@ -50,7 +50,7 @@ namespace ExampleMoveOnMap3d
             this._componentMap.UpdateOrder = 2;
             this.Components.Add(this._componentMap);
 
-            this._componentRender = new ComponentRender(this, this._componentMap);
+            this._componentRender = new ComponentRender(this, this._componentInputs, this._componentMap);
             this._componentRender.UpdateOrder = 3;
             this.Components.Add(this._componentRender);
         }

@@ -105,7 +105,9 @@
     </Compile>
     <Compile Include="Components\Inputs\ComponentInputs.cs" />
     <Compile Include="Components\Inputs\InputData.cs" />
+    <Compile Include="Components\Map\AnimatedWaterwavesBuffered.cs" />
     <Compile Include="Components\Map\AnimatedWaterwaves.cs" />
+    <Compile Include="Components\Map\BufferedWave.cs" />
     <Compile Include="Components\Map\ComponentMap.cs" />
     <Compile Include="Components\Render\CameraView.cs" />
     <Compile Include="Components\Render\ComponentRender.cs" />

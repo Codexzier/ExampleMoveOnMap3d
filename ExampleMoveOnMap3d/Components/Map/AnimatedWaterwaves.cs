@@ -11,8 +11,8 @@ namespace ExampleMoveOnMap3d.Components.Map
         private readonly int _tilesY = 20;
         private readonly float _squareLength = 1f;
 
-        private float _waveXStart = 0f;
-        private float _waveYStart = 0f;
+        private float _waveStartX = 0f;
+        private float _waveStartY = 0f;
 
         private VertexBuffer _vertexBuffer;
         private IndexBuffer _indexBuffer;
@@ -46,8 +46,8 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this.ClearBuffers();
 
-            this._waveXStart += .05f;
-            this._waveYStart += .2f;
+            this._waveStartX += .05f;
+            this._waveStartY += .2f;
 
             List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
             List<int> index = new List<int>();
@@ -55,6 +55,7 @@ namespace ExampleMoveOnMap3d.Components.Map
             float setHeight = 1.4f;
 
             float waveLengthX = 10f;
+            float waveLengthY = 16f;
             float aa = 5f / this._tilesY;
             
             for (int iY = 0; iY < this._tilesY; iY++)
@@ -62,11 +63,9 @@ namespace ExampleMoveOnMap3d.Components.Map
                 for (int iX = 0; iX < this._tilesX; iX++)
                 {
                     this.SetIndex(ref index, vertices.Count);
-
-                    float waveLengthY = 16f;
-
-                    float waveX = iX + this._waveXStart;
-                    float waveY = iY + this._waveYStart;
+                    
+                    float waveX = iX + this._waveStartX;
+                    float waveY = iY + this._waveStartY;
 
                     float heightY = (float)Math.Sin(((waveY + 1) * Math.PI) / waveLengthY);
                     float heigthX1 = (float)Math.Sin((float)(waveX * Math.PI) / waveLengthX);

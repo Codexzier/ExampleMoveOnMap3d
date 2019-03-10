@@ -121,6 +121,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Content\Debug.spritefont" />
     <None Include="ExampleMoveOnMap3d_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         private BasicEffect _effect;
         private readonly Texture2D _texture;
 
-        Dictionary<int, BufferedWave> _dictionaryVertexPositions = new Dictionary<int, BufferedWave>();
+        private Dictionary<int, BufferedWave> _dictionaryVertexPositions = new Dictionary<int, BufferedWave>();
         public int Index { get; private set; } = 0;
 
         public AnimatedWaterwavesBuffered(Texture2D texture)
@@ -28,19 +28,18 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._effect.EnableDefaultLighting();
             
             // is estimated
-            int bufferIndexMay = 1600;
+            int bufferIndexSize = 1600;
 
-            for (int i = 0; i < bufferIndexMay; i++)
+            for (int i = 0; i < bufferIndexSize; i++)
             {
                 BufferedWave bufferedWave = new BufferedWave();
                 bufferedWave.Initialize(i, graphicsDevice);
-
                 this._dictionaryVertexPositions.Add(i, bufferedWave);
             }
         }
 
         /// <summary>
-        /// Update the index number
+        /// Update the index number or reset it.
         /// </summary>
         public void Update()
         {
@@ -54,6 +53,14 @@ namespace ExampleMoveOnMap3d.Components.Map
             }
         }
 
+        /// <summary>
+        /// Draw the waves by setup the parameter.
+        /// </summary>
+        /// <param name="graphicsDevice">Need to set the vertex buffer</param>
+        /// <param name="view">camera view</param>
+        /// <param name="projection">camera projection</param>
+        /// <param name="offsetPosition">set the render position of this waved plane</param>
+        /// <param name="offsetIndex">Set the index for render the stored waved plane.</param>
         internal void Draw(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Vector3 offsetPosition, int offsetIndex)
         {
             this._effect.View = view;
@@ -77,8 +84,8 @@ namespace ExampleMoveOnMap3d.Components.Map
         /// <summary>
         /// Return the valid index number.
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <param name="index">index value to check with the max index range.</param>
+        /// <returns>Return a relative index value from the offset index value.</returns>
         private int GetIndex(int index)
         {
             if (index >= this._dictionaryVertexPositions.Count)

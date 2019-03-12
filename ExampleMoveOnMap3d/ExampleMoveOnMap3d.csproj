@@ -105,15 +105,14 @@
     </Compile>
     <Compile Include="Components\Inputs\ComponentInputs.cs" />
     <Compile Include="Components\Inputs\InputData.cs" />
-    <Compile Include="Components\Map\AnimatedWaterwavesBuffered.cs" />
-    <Compile Include="Components\Map\AnimatedWaterwaves.cs" />
+    <Compile Include="Components\Map\Grounds\AnimatedWaterwavesBuffered.cs" />
+    <Compile Include="Components\Map\Grounds\AnimatedWaterwaves.cs" />
     <Compile Include="Components\Map\BottleModel.cs" />
-    <Compile Include="Components\Map\BufferedWave.cs" />
+    <Compile Include="Components\Map\Grounds\BufferedWave.cs" />
     <Compile Include="Components\Map\ComponentMap.cs" />
-    <Compile Include="Components\Map\CoordinateDetails.cs" />
+    <Compile Include="Components\Map\Data\CoordinateDetails.cs" />
     <Compile Include="Components\Map\PhysicHelper.cs" />
-    <Compile Include="Components\Map\PidController.cs" />
-    <Compile Include="Components\Map\PhysicData.cs" />
+    <Compile Include="Components\Map\Data\PhysicData.cs" />
     <Compile Include="Components\Render\CameraView.cs" />
     <Compile Include="Components\Render\ComponentRender.cs" />
     <Compile Include="GamePage.xaml.cs">
@@ -159,9 +158,7 @@
       <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\Map\Grounds\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

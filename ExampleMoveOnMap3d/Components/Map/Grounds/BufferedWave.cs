@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace ExampleMoveOnMap3d.Components.Map
+namespace ExampleMoveOnMap3d.Components.Map.Grounds
 {
     /// <summary>
     /// Contained the simpled of a plane with waves.

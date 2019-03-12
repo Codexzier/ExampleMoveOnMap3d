@@ -14,6 +14,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         public Vector3 EXTERNALFORCE;
 
         public Vector3 Velocity = new Vector3();
+        public Vector3 AngularMementum = new Vector3();
         public Vector3 SeaLevel = new Vector3();
 
         public PhysicData(float friction, float mass, float upwardTrend, Vector3 gravity)

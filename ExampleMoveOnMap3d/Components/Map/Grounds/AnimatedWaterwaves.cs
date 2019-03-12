@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExampleMoveOnMap3d.Components.Map.Data;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExampleMoveOnMap3d.Components.Map
+namespace ExampleMoveOnMap3d.Components.Map.Grounds
 {
     public class AnimatedWaterwaves
     {

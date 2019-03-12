@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ExampleMoveOnMap3d.Components.Map
+namespace ExampleMoveOnMap3d.Components.Map.Data
 {
 
     public struct CoordinateDetails

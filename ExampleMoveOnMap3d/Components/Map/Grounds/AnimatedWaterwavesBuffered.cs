@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace ExampleMoveOnMap3d.Components.Map
+namespace ExampleMoveOnMap3d.Components.Map.Grounds
 {
     public class AnimatedWaterwavesBuffered
     {

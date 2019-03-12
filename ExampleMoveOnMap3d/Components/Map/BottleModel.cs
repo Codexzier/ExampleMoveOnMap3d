@@ -134,7 +134,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this.PhysicData.EXTERNALFORCE = this.PhysicData.GRAVITY * this.PhysicData.MASS;
 
-            var upwardForce = this.Position.Z < this.PhysicData.SeaLevel.Z ? this.CalcUpwardTrend() : 0f;
+            var upwardForce = this.Position.Z < this.PhysicData.SeaLevel.Z ? this.CalcUpwardTrend() : 1f;
 
             this.PhysicData.EXTERNALFORCE *= new Vector3(0, 0, upwardForce);
             Debug.WriteLine($"External force: {this.PhysicData.EXTERNALFORCE}");
@@ -152,10 +152,13 @@ namespace ExampleMoveOnMap3d.Components.Map
 
         private void SetFriction(GameTime gameTime)
         {
+            // direction
             // TODO: Schräglage als Beschleunigung verwenden?
-            var velocityDirection = new Vector3();
+            var velocityDirection = this._rotation * .1f;
+            velocityDirection += new Vector3(0, 0, .1f);
+            Debug.WriteLine($"VeloDirection: {velocityDirection}");
 
-            Vector3 friction = new Vector3(1, 1, .1f) * this.PhysicData.FRICTION;
+            Vector3 friction = new Vector3(1f, 1f, .1f) * this.PhysicData.FRICTION;
             Vector3 powerDirection = (this.PhysicData.POWER * velocityDirection) + this.PhysicData.EXTERNALFORCE;
 
             Vector3 velocityChange = (2.0f / this.PhysicData.MASS * (powerDirection - friction * this.PhysicData.Velocity)) * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -164,6 +167,11 @@ namespace ExampleMoveOnMap3d.Components.Map
                 (float)(velocityChange.X < 0 ? -Math.Sqrt(-velocityChange.X) : Math.Sqrt(velocityChange.X)),
                 (float)(velocityChange.Y < 0 ? -Math.Sqrt(-velocityChange.Y) : Math.Sqrt(velocityChange.Y)),
                 (float)(velocityChange.Z < 0 ? -Math.Sqrt(-velocityChange.Z) : Math.Sqrt(velocityChange.Z)));
+
+            // rotation
+            // TODO: L = J * w
+            Vector3 angularMomentumChanged = (this.PhysicData.AngularMementum - this.Rotation) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            this.PhysicData.AngularMementum = angularMomentumChanged;
         }
     }
 }

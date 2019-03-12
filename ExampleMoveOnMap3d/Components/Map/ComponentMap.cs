@@ -80,28 +80,42 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             if (resultBottle > 0)
             {
-                //if (resultBottle > this._reducedUp)
-                //{
-                //    this._reducedUp = resultBottle;
-                //}
+                if (resultBottle > this._reducedUp)
+                {
+                    this._reducedUp = resultBottle;
+                }
                 resultBottle = 0;
             }
 
             // Debug.WriteLine($"Reduced: {this._reducedUp}");
-            var velocityChange = this._bottleModel.PhysicData.Velocity;// + new Vector3(0, 0, resultBottle); //(1f / this._reducedUp);
+            var velocityChange = this._bottleModel.PhysicData.Velocity * (1f / this._reducedUp);
            // Debug.WriteLine($"velo change: {velocityChange}");
             this._bottleModel.AddPosition(velocityChange);
 
             // rotation
             // TODO: sometime it jump to quick rotation state
-            var rotationChanged = (seaLevel.Rotation + this._lastRotation - seaLevel.Rotation) + this._bottleModel.PhysicData.AngularMementum * 10f;
-            this._bottleModel.SetRotation(rotationChanged);
-            this._lastRotation = seaLevel.Rotation;
+            //var rotationChanged = seaLevel.Rotation + this._bottleModel.PhysicData.AngularMementum;
+            this._bottleModel.SetRotationAct(seaLevel.Rotation);
+            //this._lastRotation = seaLevel.Rotation;
+
+            Debug.WriteLine($"velo change: {this._bottleModel.Position}");
 
             //var seaLevel2 = this._animatedWaterwaves.GetSeaLevelInformation(this._bottleModel2.Position);
             //this._bottleModel2.SetPosition(seaLevel2.Position);
             //this._bottleModel2.SetRotation(seaLevel2.Rotation);
         }
+
+        //private float GetAxisRotation(float axisSeaRotation, float axisAngualarMementum)
+        //{
+        //    if(axisSeaRotation > 0)
+        //    {
+        //        return axisAngualarMementum;
+        //    }
+        //    else
+        //    {
+        //        return axisAngualarMementum > 0
+        //    }
+        //}
 
         public void DrawContent(Matrix view, Matrix projection)
         {

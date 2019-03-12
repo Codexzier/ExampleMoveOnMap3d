@@ -39,6 +39,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         public Vector3 RelativeOffsetPosition { get; set; }
         public Vector3 Position => this._position;
         public Vector3 Rotation => this._rotation;
+        private Vector3 _rotationAct;
 
         public BottleModel(Vector3 offsetPosition, Vector3 offsetRotation, float scale, Model model)
         {
@@ -130,11 +131,13 @@ namespace ExampleMoveOnMap3d.Components.Map
             effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 10); 
         }
 
+        internal void SetRotationAct(Vector3 rotation) => this._rotationAct = rotation;
+
         public void Update(GameTime gameTime)
         {
             this.PhysicData.EXTERNALFORCE = this.PhysicData.GRAVITY * this.PhysicData.MASS;
 
-            var upwardForce = this.Position.Z < this.PhysicData.SeaLevel.Z ? this.CalcUpwardTrend() : 0f;
+            var upwardForce = this.Position.Z < this.PhysicData.SeaLevel.Z ? this.CalcUpwardTrend() : 1f;
 
             this.PhysicData.EXTERNALFORCE *= new Vector3(0, 0, upwardForce);
             Debug.WriteLine($"External force: {this.PhysicData.EXTERNALFORCE}");
@@ -170,8 +173,12 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             // rotation
             // TODO: L = J * w
-            Vector3 angularMomentumChanged = (this.PhysicData.AngularMementum - this.Rotation) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            var rotateDiff = this._rotationAct - this._rotation;
+            Vector3 angularMomentumChanged = (this.PhysicData.AngularMementum + rotateDiff) * (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
             this.PhysicData.AngularMementum = angularMomentumChanged;
+
+            this.SetRotation(angularMomentumChanged);
         }
     }
 }

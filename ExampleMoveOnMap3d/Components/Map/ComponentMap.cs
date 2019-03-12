@@ -19,7 +19,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         private PhysicHelper _helper1 = new PhysicHelper();
         // the bottle
         private PhysicHelper _helper2 = new PhysicHelper(72.75f, .7f, 5f);
-        
+
         private float _reducedUp = 0;
         private Vector3 _lastRotation = new Vector3();
 
@@ -37,8 +37,8 @@ namespace ExampleMoveOnMap3d.Components.Map
             this._animatedWaterwaves.Initialize(this.Game.GraphicsDevice);
 
             var bottle = this.Game.Content.Load<Model>("bottle");
-            this._bottleModel = new BottleModel(new Vector3(0,0,-2), new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0), 1f, bottle);
-            this._bottleModel.SetPosition(new Vector3(10,10,0));
+            this._bottleModel = new BottleModel(new Vector3(0, 0, -2), new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0), 1f, bottle);
+            this._bottleModel.SetPosition(new Vector3(10, 10, 0));
 
             // the buffered waves
             //this.AnimatedWaterwavesBuffered = new AnimatedWaterwavesBuffered(texture);
@@ -49,7 +49,7 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             var seaLevel = this._animatedWaterwaves.GetSeaLevelInformation(this._bottleModel.Position);
             this._bottleModel.SetRotation(seaLevel.Rotation);
-            this._lastRotation = this._bottleModel.Rotation + new Vector3(0,0,1);
+            this._lastRotation = this._bottleModel.Rotation + new Vector3(0, 0, 1);
         }
 
         public override void Update(GameTime gameTime)
@@ -64,12 +64,12 @@ namespace ExampleMoveOnMap3d.Components.Map
 
             // the buffered waves
             //this.AnimatedWaterwavesBuffered.Update();
-        
+
             // TODO: must going to refactore this chaos -.-
 
             this._bottleModel.SetOffsetRotation(new Vector3(MathHelper.ToRadians(0), MathHelper.ToRadians(90), 0));
             this._bottleModel.AddPosition(new Vector3(this._componentInputs.Inputs.Move, 0), .3f);
-            
+
             // This is the unbuffered waves
             this._animatedWaterwaves.Update(this.Game.GraphicsDevice);
             var seaLevel = this._animatedWaterwaves.GetSeaLevelInformation(this._bottleModel.Position);
@@ -77,18 +77,19 @@ namespace ExampleMoveOnMap3d.Components.Map
             // direction move
             var resultBottle = this._helper2.CalculateUptrustValue(seaLevel.Position.Z, this._bottleModel.Position.Z);
 
+
             if (resultBottle > 0)
             {
-                if (resultBottle > this._reducedUp)
-                {
-                    this._reducedUp = resultBottle;
-                }
-
+                //if (resultBottle > this._reducedUp)
+                //{
+                //    this._reducedUp = resultBottle;
+                //}
                 resultBottle = 0;
             }
 
-            Debug.WriteLine($"Reduced: {this._reducedUp}");
-            var velocityChange = this._bottleModel.PhysicData.Velocity * (1f / this._reducedUp);
+            // Debug.WriteLine($"Reduced: {this._reducedUp}");
+            var velocityChange = this._bottleModel.PhysicData.Velocity;// + new Vector3(0, 0, resultBottle); //(1f / this._reducedUp);
+           // Debug.WriteLine($"velo change: {velocityChange}");
             this._bottleModel.AddPosition(velocityChange);
 
             // rotation

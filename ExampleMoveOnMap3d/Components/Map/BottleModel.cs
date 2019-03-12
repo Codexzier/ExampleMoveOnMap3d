@@ -134,7 +134,7 @@ namespace ExampleMoveOnMap3d.Components.Map
         {
             this.PhysicData.EXTERNALFORCE = this.PhysicData.GRAVITY * this.PhysicData.MASS;
 
-            var upwardForce = this.Position.Z < this.PhysicData.SeaLevel.Z ? this.CalcUpwardTrend() : 1f;
+            var upwardForce = this.Position.Z < this.PhysicData.SeaLevel.Z ? this.CalcUpwardTrend() : 0f;
 
             this.PhysicData.EXTERNALFORCE *= new Vector3(0, 0, upwardForce);
             Debug.WriteLine($"External force: {this.PhysicData.EXTERNALFORCE}");
@@ -156,7 +156,7 @@ namespace ExampleMoveOnMap3d.Components.Map
             // TODO: Schräglage als Beschleunigung verwenden?
             var velocityDirection = this._rotation * .1f;
             velocityDirection += new Vector3(0, 0, .1f);
-            Debug.WriteLine($"VeloDirection: {velocityDirection}");
+            //Debug.WriteLine($"VeloDirection: {velocityDirection}");
 
             Vector3 friction = new Vector3(1f, 1f, .1f) * this.PhysicData.FRICTION;
             Vector3 powerDirection = (this.PhysicData.POWER * velocityDirection) + this.PhysicData.EXTERNALFORCE;
